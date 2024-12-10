@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { expect, it } from "vitest";
 
-import Count from "@/pages/Count";
+import Count from "@/pages/Login";
 
 it("renders <Count /> page", () => {
   const { getByText } = render(<Count />);
