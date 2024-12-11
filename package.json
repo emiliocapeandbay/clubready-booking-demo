@@ -6,11 +6,11 @@
   "license": "MIT",
   "scripts": {
     "start": "yarn dev",
-    "test": "vitest run --coverage",
-    "test:lite": "vitest run",
-    "test:watch": "vitest watch",
-    "dev": "vite",
-    "dist": "yarn lint && yarn test && vite build",
+    "test": "yarn test",
+    "test:lite": "yarn test:lite",
+    "test:watch": "yarn test:watch",
+    "dev": "yarn dev",
+    "dist": "yarn dist",
     "lint": "yarn lint-js & yarn lint-ts",
     "lint-js": "eslint './src/**/*.{js,jsx,ts,tsx}'",
     "lint-ts": "tsc --noemit"
