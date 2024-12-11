@@ -17,6 +17,21 @@
   font-weight: bold;
 }
 
+.react-datepicker__month-container{
+  width: 100%;
+}
+
+.react-datepicker__day-names {
+  display: flex;
+  justify-content: space-around;
+  margin: 0.5rem 0;
+}
+
+.react-datepicker__week {
+  display: flex;
+  justify-content: space-around;
+}
+
 .react-datepicker__day-name,
 .react-datepicker__day {
   width: 3rem;
@@ -32,8 +47,5 @@
 
 .react-datepicker__day--today {
   font-weight: bold;
-  color: #fff;
-}
-.react-datepicker__month-container {
-    width: 100%;
+  color: #007bff;
 }

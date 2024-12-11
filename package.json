@@ -44,6 +44,8 @@
   },
   "dependencies": {
     "@testing-library/react": "^16.1.0",
+    "mapbox-gl": "^3.8.0",
+    "ol": "^10.3.1",
     "react": "^19.0.0",
     "react-datepicker": "^7.5.0",
     "react-dom": "^19.0.0",

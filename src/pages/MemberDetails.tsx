@@ -8,8 +8,6 @@ interface MemberDetailsProps {
 }
 
 const MemberDetails: React.FC<MemberDetailsProps> = ({ onComplete }): React.ReactElement => {
-  const [location, setLocation] = useState("2670");
-  const [storeId, setStoreId] = useState("2670");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,16 +16,11 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ onComplete }): React.Reac
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve data from local storage
-    const storedLocation = localStorage.getItem("location");
-    const storedStoreId = localStorage.getItem("storeId");
     const storedFirstName = localStorage.getItem("firstName");
     const storedLastName = localStorage.getItem("lastName");
     const storedEmail = localStorage.getItem("email");
     const storedPhone = localStorage.getItem("phone");
 
-    if (storedLocation) setLocation(storedLocation);
-    if (storedStoreId) setStoreId(storedStoreId);
     if (storedFirstName) setFirstName(storedFirstName);
     if (storedLastName) setLastName(storedLastName);
     if (storedEmail) setEmail(storedEmail);
@@ -36,9 +29,6 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ onComplete }): React.Reac
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Save data to local storage
-    localStorage.setItem("location", location);
-    localStorage.setItem("storeId", storeId);
     localStorage.setItem("firstName", firstName);
     localStorage.setItem("lastName", lastName);
     localStorage.setItem("email", email);
@@ -46,9 +36,8 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ onComplete }): React.Reac
 
     toast.success("Information saved successfully!");
 
-    // Mark step as completed and navigate to the next tab
     onComplete();
-    setActiveTab(1);
+    setActiveTab(2);
   };
 
   return (
@@ -64,32 +53,9 @@ const MemberDetails: React.FC<MemberDetailsProps> = ({ onComplete }): React.Reac
         <div className="w-full md:w-1/2 h-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 p-6 flex items-center justify-center">
           <div className="w-full max-w-md">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white mb-6">
-              Location and Details
+              Member Details
             </h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="location" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location</label>
-                <select
-                  id="location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                >
-                  <option value="2670">2670</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="storeId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Store ID</label>
-                <input
-                  type="text"
-                  id="storeId"
-                  value={storeId}
-                  onChange={(e) => setStoreId(e.target.value)}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  required
-                />
-              </div>
               <div>
                 <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
                 <input
