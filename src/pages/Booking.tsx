@@ -25,7 +25,7 @@ interface ClassSchedule {
 const Booking: React.FC<BookingProps> = ({ onComplete }) => {
   const [classSchedules, setClassSchedules] = useState<ClassSchedule[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(Date.UTC(2019, 11, 31)));
-  const [selectedClassSchedule, setSelectedClassSchedule] = useState<{ ClassId: number, ScheduleId: number } | null>(null);
+  const [selectedClassSchedule, setSelectedClassSchedule] = useState<{ ClassId: number, ScheduleId: number, Date: string, StartTime: string, EndTime: string } | null>(null);
   const { setActiveTab } = useTab();
 
   useEffect(() => {
@@ -50,8 +50,8 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
     }
   }, [selectedDate]);
 
-  const handleSelectBundle = (classId: number, scheduleId: number) => {
-    const selectedSchedule = { ClassId: classId, ScheduleId: scheduleId };
+  const handleSelectBundle = (classId: number, scheduleId: number, date: string, startTime: string, endTime: string) => {
+    const selectedSchedule = { ClassId: classId, ScheduleId: scheduleId, Date: date, StartTime: startTime, EndTime: endTime };
     localStorage.setItem("selectedClassSchedule", JSON.stringify(selectedSchedule));
     setSelectedClassSchedule(selectedSchedule);
     toast.success("Bundle selected successfully!");
@@ -115,7 +115,7 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
                     <span className="text-gray-500 dark:text-gray-400">spots available</span>
                   </div>
                   <button
-                    onClick={() => handleSelectBundle(schedule.ClassId, schedule.ScheduleId)}
+                    onClick={() => handleSelectBundle(schedule.ClassId, schedule.ScheduleId, schedule.Date, schedule.StartTime, schedule.EndTime)}
                     className="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-primary-900"
                   >
                     Select Bundle

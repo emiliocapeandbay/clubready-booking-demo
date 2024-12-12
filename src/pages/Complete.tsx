@@ -6,9 +6,6 @@ const Complete: React.FC = (): React.ReactElement => {
 
   useEffect(() => {
     const selectedClassSchedule = localStorage.getItem("selectedClassSchedule");
-    const cardNumber = localStorage.getItem("cardNumber");
-    const expiryDate = localStorage.getItem("expiryDate");
-    const cvv = localStorage.getItem("cvv");
     const memberDetails = {
       firstName: localStorage.getItem("firstName"),
       lastName: localStorage.getItem("lastName"),
@@ -19,16 +16,16 @@ const Complete: React.FC = (): React.ReactElement => {
 
     setStoredInfo({
       selectedClassSchedule: selectedClassSchedule ? JSON.parse(selectedClassSchedule) : null,
-      cardNumber,
-      expiryDate,
-      cvv,
       memberDetails,
       selectedBundle: selectedBundle ? JSON.parse(selectedBundle) : null,
     });
   }, []);
 
   const handleSubmit = async () => {
-    if (!storedInfo) return;
+    if (!storedInfo || !storedInfo.selectedClassSchedule || !storedInfo.memberDetails || !storedInfo.selectedBundle) {
+      toast.error("Please select all data previous to submit");
+      return;
+    }
 
     try {
       // Create prospect
@@ -77,7 +74,7 @@ const Complete: React.FC = (): React.ReactElement => {
     <div className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
       <Toaster />
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 p-6">
-        {storedInfo && (
+        {storedInfo && storedInfo.selectedClassSchedule  && storedInfo.memberDetails && storedInfo.selectedBundle ? (
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Stored Information</h2>
             <div className="mb-4">
@@ -97,20 +94,18 @@ const Complete: React.FC = (): React.ReactElement => {
               <p className="text-gray-500 dark:text-gray-400">Name: {storedInfo.selectedBundle.Name}</p>
               <p className="text-gray-500 dark:text-gray-400">Price: ${parseFloat(storedInfo.selectedBundle.Price).toFixed(2)}</p>
             </div>
-            <div className="mb-4">
-              <h3 className="text-md font-semibold text-gray-900 dark:text-white">Payment Details</h3>
-              <p className="text-gray-500 dark:text-gray-400">Card Number: {storedInfo.cardNumber}</p>
-              <p className="text-gray-500 dark:text-gray-400">Expiry Date: {storedInfo.expiryDate}</p>
-              <p className="text-gray-500 dark:text-gray-400">CVV: {storedInfo.cvv}</p>
-            </div>
+            <button
+              onClick={handleSubmit}
+              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+            >
+              Submit Info
+            </button>
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            <p>Go Back and Choose your options</p>
           </div>
         )}
-        <button
-          onClick={handleSubmit}
-          className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        >
-          Submit Info
-        </button>
       </div>
     </div>
   );
