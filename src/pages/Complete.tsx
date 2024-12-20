@@ -45,7 +45,7 @@ const Complete: React.FC = (): React.ReactElement => {
       if (prospectData.Success) {
         const userId = prospectData.UserId;
 
-        // Book class
+        // Book class for the user
         const bookingResponse = await fetch(`https://clubready.com/api/current/scheduling/class-booking?ApiKey=a16bc485-5b21-4277-9564-7bf4474dfc92&UserId=${userId}&StoreId=2670&ScheduleId=${storedInfo.selectedClassSchedule.ScheduleId}`, {
           method: 'POST',
           headers: {
