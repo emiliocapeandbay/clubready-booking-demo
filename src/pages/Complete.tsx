@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from 'react-hot-toast';
+import { FaCopy } from 'react-icons/fa';
 
 const Complete: React.FC = (): React.ReactElement => {
   const [storedInfo, setStoredInfo] = useState<any>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
 
   useEffect(() => {
     const selectedClassSchedule = localStorage.getItem("selectedClassSchedule");
@@ -56,6 +58,7 @@ const Complete: React.FC = (): React.ReactElement => {
         const bookingData = await bookingResponse.json();
 
         if (bookingData.BookingId && bookingData.BookingId !== -1) {
+          setBookingId(bookingData.BookingId.toString());
           toast.success(`Booking successful! Booking ID: ${bookingData.BookingId}`);
         } else if (bookingData.BookingId === -1) {
           toast.error(`Booking failed: ${bookingData.Message}`);
@@ -70,41 +73,62 @@ const Complete: React.FC = (): React.ReactElement => {
     }
   };
 
+  const handleCopy = () => {
+    if (bookingId) {
+      navigator.clipboard.writeText(bookingId);
+      toast.success("Booking ID copied to clipboard!");
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
       <Toaster />
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700 p-6">
-        {storedInfo && storedInfo.selectedClassSchedule  && storedInfo.memberDetails && storedInfo.selectedBundle ? (
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Stored Information</h2>
-            <div className="mb-4">
-              <h3 className="text-md font-semibold text-gray-900 dark:text-white">Member Details</h3>
-              <p className="text-gray-500 dark:text-gray-400">First Name: {storedInfo.memberDetails.firstName}</p>
-              <p className="text-gray-500 dark:text-gray-400">Last Name: {storedInfo.memberDetails.lastName}</p>
-              <p className="text-gray-500 dark:text-gray-400">Email: {storedInfo.memberDetails.email}</p>
-              <p className="text-gray-500 dark:text-gray-400">Phone: {storedInfo.memberDetails.phone}</p>
+        {bookingId ? (
+          <div className="text-center">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Thank You!</h2>
+            <p className="text-gray-500 dark:text-gray-400 mb-4">Your booking was successful. Here is your booking ID:</p>
+            <div className="flex items-center justify-center mb-4">
+              <span className="text-gray-900 dark:text-white font-bold">{bookingId}</span>
+              <button onClick={handleCopy} className="ml-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                <FaCopy />
+              </button>
             </div>
-            <div className="mb-4">
-              <h3 className="text-md font-semibold text-gray-900 dark:text-white">Class Schedule</h3>
-              <p className="text-gray-500 dark:text-gray-400">Date: {storedInfo.selectedClassSchedule.Date}</p>
-              <p className="text-gray-500 dark:text-gray-400">Time: {storedInfo.selectedClassSchedule.StartTime} - {storedInfo.selectedClassSchedule.EndTime}</p>
-            </div>
-            <div className="mb-4">
-              <h3 className="text-md font-semibold text-gray-900 dark:text-white">Bundle</h3>
-              <p className="text-gray-500 dark:text-gray-400">Name: {storedInfo.selectedBundle.Name}</p>
-              <p className="text-gray-500 dark:text-gray-400">Price: ${parseFloat(storedInfo.selectedBundle.Price).toFixed(2)}</p>
-            </div>
-            <button
-              onClick={handleSubmit}
-              className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              Submit Info
-            </button>
+            <p className="text-gray-500 dark:text-gray-400">You can use this ID for any future reference.</p>
           </div>
         ) : (
-          <div className="text-center text-gray-500 dark:text-gray-400">
-            <p>Go Back and Choose your options</p>
-          </div>
+          storedInfo && storedInfo.selectedClassSchedule && storedInfo.memberDetails && storedInfo.selectedBundle ? (
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Stored Information</h2>
+              <div className="mb-4">
+                <h3 className="text-md font-semibold text-gray-900 dark:text-white">Member Details</h3>
+                <p className="text-gray-500 dark:text-gray-400">First Name: {storedInfo.memberDetails.firstName}</p>
+                <p className="text-gray-500 dark:text-gray-400">Last Name: {storedInfo.memberDetails.lastName}</p>
+                <p className="text-gray-500 dark:text-gray-400">Email: {storedInfo.memberDetails.email}</p>
+                <p className="text-gray-500 dark:text-gray-400">Phone: {storedInfo.memberDetails.phone}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="text-md font-semibold text-gray-900 dark:text-white">Class Schedule</h3>
+                <p className="text-gray-500 dark:text-gray-400">Date: {storedInfo.selectedClassSchedule.Date}</p>
+                <p className="text-gray-500 dark:text-gray-400">Time: {storedInfo.selectedClassSchedule.StartTime} - {storedInfo.selectedClassSchedule.EndTime}</p>
+              </div>
+              <div className="mb-4">
+                <h3 className="text-md font-semibold text-gray-900 dark:text-white">Bundle</h3>
+                <p className="text-gray-500 dark:text-gray-400">Name: {storedInfo.selectedBundle.Name}</p>
+                <p className="text-gray-500 dark:text-gray-400">Price: ${parseFloat(storedInfo.selectedBundle.Price).toFixed(2)}</p>
+              </div>
+              <button
+                onClick={handleSubmit}
+                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+              >
+                Submit Info
+              </button>
+            </div>
+          ) : (
+            <div className="text-center text-gray-500 dark:text-gray-400">
+              <p>Go Back and Choose your options</p>
+            </div>
+          )
         )}
       </div>
     </div>

@@ -26,6 +26,8 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
   const [classSchedules, setClassSchedules] = useState<ClassSchedule[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date(Date.UTC(2019, 11, 31)));
   const [selectedClassSchedule, setSelectedClassSchedule] = useState<{ ClassId: number, ScheduleId: number, Date: string, StartTime: string, EndTime: string } | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 1; // Number of items to show per page
   const { setActiveTab } = useTab();
 
   useEffect(() => {
@@ -62,6 +64,18 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
   const handleRemoveSelection = () => {
     localStorage.removeItem("selectedClassSchedule");
     setSelectedClassSchedule(null);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < Math.ceil(classSchedules.length / itemsPerPage) - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   return (
@@ -103,8 +117,8 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
                 className="w-full p-2 border rounded"
               />
             </div>
-            <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
-              {classSchedules.map(schedule => (
+            <div className="space-y-8 lg:grid lg:grid-cols-1 sm:gap-6 xl:gap-10 lg:space-y-0">
+              {classSchedules.slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage).map(schedule => (
                 <div key={`${schedule.ClassId}-${schedule.ScheduleId}`} className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg border border-gray-100 shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-white">
                   <h3 className="mb-4 text-2xl h-[90px] font-semibold">{schedule.Title}</h3>
                   <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
@@ -122,6 +136,22 @@ const Booking: React.FC<BookingProps> = ({ onComplete }) => {
                   </button>
                 </div>
               ))}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 0}
+                className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-gray-900"
+              >
+                Previous
+              </button>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage >= Math.ceil(classSchedules.length / itemsPerPage) - 1}
+                className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:text-white dark:focus:ring-gray-900"
+              >
+                Next
+              </button>
             </div>
           </>
         )}
